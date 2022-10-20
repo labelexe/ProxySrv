@@ -1,0 +1,40 @@
+version: "3.1"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pg_data: null
+
+services:
+  proxy_ngserver:
+    # restart: always
+    image: "nginx:latest"
+    container_name: ${PROJECT_NAME}-proxy
+    working_dir: /application
+    volumes:
+      # - "./app:/application"
+      # - './app_admin:/application_admin'
+      - "./phpdocker/nginx:/etc/nginx/conf.d"
+    ports:
+      - "80:80"
+      # - "8010:8010"
+      - "443:433"
+    networks:
+      - app-network
+  #Reverse proxy
+  # ngrok:
+  #   image: 'shkoliar/ngrok:latest'
+  #   # не перезапусаеться после ручной остановки
+  #   restart: unless-stopped
+  #   ports:
+  #     - '4551:4551'
+  #   links:
+  #     - webserver
+  #   environment:
+  #     - DOMAIN=webserver
+  #     - PORT=80
+  #     - AUTH_TOKEN=4PLPWiCDhDhWR2EHgtYvq_6Nj7TC3pw3PocW9rJcUxN
+  #   networks:
+  #     - app-network
